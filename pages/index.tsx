@@ -77,7 +77,7 @@ const Home: NextPage = () => {
   })
 
   const onPlayerMove = (t: Tile) => {
-    if (isOver(game)) {
+    if (isOver(game) || hasPlayer(t)) {
       return
     }
 
