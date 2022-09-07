@@ -53,23 +53,12 @@ const GameOver = ({ winner, onPlayAgain }: GameOverProps) => (
   </div>
 )
 
-const emptyBoard = [
-  [
-    { x: 0, y: 0 },
-    { x: 1, y: 0 },
-    { x: 2, y: 0 }
-  ],
-  [
-    { x: 0, y: 1 },
-    { x: 1, y: 1 },
-    { x: 2, y: 1 }
-  ],
-  [
-    { x: 0, y: 2 },
-    { x: 1, y: 2 },
-    { x: 2, y: 2 }
-  ]
-]
+const emptyBoard = [...Array(3)].map((_, y) =>
+  [...Array(3)].map((_, x) => ({
+    x,
+    y
+  }))
+)
 
 const gameChecks = [
   {
@@ -196,11 +185,7 @@ function ai(game: State): State {
 
   // Win if you can
   for (const checker of gameChecks) {
-    const tiles = []
-    for (const c of checker.check) {
-      tiles.push(board[c.y][c.x])
-    }
-
+    const tiles = checker.check.map((c) => board[c.y][c.x])
     const wins = tiles.filter((t) => t.player === 'O')
     if (wins.length == 2) {
       const tile = tiles.find((t) => !t.player)
@@ -213,11 +198,7 @@ function ai(game: State): State {
 
   // Stop the player from winning if you need to
   for (const checker of gameChecks) {
-    const tiles = []
-    for (const c of checker.check) {
-      tiles.push(board[c.y][c.x])
-    }
-
+    const tiles = checker.check.map((c) => board[c.y][c.x])
     const opps = tiles.filter((t) => t.player === 'X')
     if (opps.length == 2) {
       const tile = tiles.find((t) => !t.player)
@@ -245,10 +226,7 @@ function isOver(game: State): Player | undefined {
   const { board } = game
 
   for (const checker of gameChecks) {
-    const tiles = []
-    for (const c of checker.check) {
-      tiles.push(board[c.y][c.x])
-    }
+    const tiles = checker.check.map((c) => board[c.y][c.x])
     if (isSame(...tiles)) {
       return tiles[0].player
     }
